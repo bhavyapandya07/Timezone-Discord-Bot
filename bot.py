@@ -3,7 +3,6 @@ from discord.ext import commands, tasks
 import pytz
 from datetime import datetime
 
-
 intents = discord.Intents.default()
 intents.typing = False
 intents.presences = False
