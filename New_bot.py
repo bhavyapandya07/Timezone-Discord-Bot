@@ -9,23 +9,23 @@ intents.presences = False
 
 bot = commands.Bot(command_prefix='!', intents=intents)
 
-Unicode flag emojis
-FLAG_EMOJIS = {
-    'USA': '\U0001F1FA\U0001F1F8',
-    'Nigeria': '\U0001F1F3\U0001F1EC',
-    'India': '\U0001F1EE\U0001F1F3'
-}
-
 @bot.event
 async def on_ready():
     print(f'Logged in as {bot.user.name} ({bot.user.id})')
     update_timezones.start()
 
+timezones = [
+    ('USA', 'America/New_York'),
+    ('Nigeria', 'Africa/Lagos'),
+    ('India', 'Asia/Kolkata')
+]
+
+channel_data = {}  # To store channel information
 
 @tasks.loop(minutes=5)
 async def update_timezones():
-    guild_id = 1234567890  # Replace with your guild ID
-    guild = bot.get_guild(YOUR_SERVER_ID)
+    guild_id = "YOUR_SERVER_ID"  # Replace with your Server ID
+    guild = bot.get_guild(guild_id)
     category_name = 'Current Time'
 
     # Check if the category already exists, create it if it doesn't
@@ -33,28 +33,23 @@ async def update_timezones():
     if category is None:
         category = await guild.create_category(category_name)
 
-    # Get the existing voice channels within the category
-    voice_channels = [channel for channel in category.voice_channels]
-
-    # Update the names of existing voice channels for each time zone
-    timezones = [
-        ('USA', 'America/Los_Angeles'),
-        ('Nigeria', 'Africa/Lagos'),
-        ('India', 'Asia/Kolkata')
-    ]
-
-    for channel, (tz_name, tz_id) in zip(voice_channels, timezones):
+    for tz_name, tz_id in timezones:
         timezone = pytz.timezone(tz_id)
-        current_time = datetime.now(timezone).strftime('%d %b %Y %I:%M %p')  # Include day and year
-        flag_emoji = FLAG_EMOJIS.get(tz_name, '')
-        channel_name = f'{flag_emoji} {current_time}'
-        await channel.edit(name=channel_name)
+        current_time = datetime.now(timezone).strftime('%I:%M %p')  # 12-hour format with AM/PM
+        channel_name = f'{tz_name} Time: {current_time}'
 
+        # Check if a channel already exists for this timezone
+        if tz_name in channel_data:
+            channel = channel_data[tz_name]
+            await channel.edit(name=channel_name)
+        else:
+            # Create a new voice channel if it doesn't exist
+            channel = await category.create_voice_channel(channel_name)
+            channel_data[tz_name] = channel
 
 @bot.command()
 async def timezone(ctx):
     await update_timezones()
     await ctx.send('Time zone channels have been updated.')
 
-
-bot.run('YOUR_BOT_TOKEN')
+bot.run('YOUR_BOT_TOKEN')  # Replace with your Bot Token
