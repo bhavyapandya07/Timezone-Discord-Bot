@@ -60,4 +60,4 @@ Before running the bot, make sure you have the following installed:
 
 ## Contact
 
-For any inquiries or support, please contact [Bhavya Pandya](mailto:bhavya@crito.design).
+For any inquiries or support, please contact [Bhavya Pandya](mailto:bhavyapandya07@gmail.com).
