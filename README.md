@@ -48,11 +48,7 @@ Before running the bot, make sure you have the following installed:
    python bot.py
    ```
 
-2. Invite the bot to your Discord server using the following link:
-
-   ```
-   https://discord.com/oauth2/authorize?client_id=YOUR_CLIENT_ID&scope=bot
-   ```
+2. Invite the bot to your Discord server using the discord developer portal link:
 
 3. Once the bot is in your server, you can use the `!timezone` command to create the "Current Time ⌚" category and the three voice channels with the displayed time for each time zone.
 
